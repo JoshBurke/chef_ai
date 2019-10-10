@@ -26,8 +26,18 @@
   ; Parameters:
   ; - x: the chef  
   ; - y: the tool  
-  (:action grab-tool
-    ; WRITE HERE THE CODE FOR THIS ACTION
+  (:action grab-tool :parameters (?x ?y)
+    :precondition (and 
+      (CHEF ?x)
+      (TOOL ?y)
+      (not (chef-holds-some-tool ?x))
+      (free-tool ?y)
+    )
+    :effect (and 
+      (chef-holds-tool ?x ?y)
+      (chef-holds-some-tool ?x)
+      (not (free-tool ?y))
+    )
   )
 
   ; Chef x can drop a tool y if they hold the tool   
@@ -35,8 +45,17 @@
   ; Parameters:
   ; - x: the chef  
   ; - y: the tool 
-  (:action drop-tool
-     ; WRITE HERE THE CODE FOR THIS ACTION
+  (:action drop-tool :parameters (?x ?y)
+    :precondition (and 
+      (CHEF ?x)
+      (TOOL ?y)
+      (chef-holds-tool ?x ?y)
+    )
+    :effect (and 
+      (not (chef-holds-tool ?x ?y))
+      (not (chef-holds-some-tool ?x))
+      (free-tool ?y)
+    )
   )
 
   ; Chef x can chop veggie y with a tool z that can be used for cutting
@@ -45,8 +64,18 @@
   ; - x: the chef  
   ; - y: the veggie 
   ; - z: the tool 
-  (:action chop
-     ; WRITE HERE THE CODE FOR THIS ACTION
+  (:action chop :parameters (?x ?y ?z)
+    ::precondition (and 
+      (CHEF ?x)
+      (VEGGIE ?y)
+      (TOOL ?z)
+      (chef-holds-tool ?x ?z)
+      (CAN-CUT ?z)
+      (not (chopped ?y))
+    )
+    :effect (and 
+      (chopped ?y)
+    )
   )
    
   ; Chef x can add veggie y to a soup z if veggie y was chopped and if the chef does not hold any tool
@@ -55,8 +84,19 @@
   ; - x: the chef  
   ; - y: the veggie 
   ; - z: the soup 
-  (:action add
-    ; WRITE HERE THE CODE FOR THIS ACTION
+  (:action add :parameters (?x ?y ?z)
+    :precondition (and 
+      (CHEF ?x)
+      (VEGGIE ?y)
+      (SOUP ?z)
+      (chopped ?y)
+      (not (chef-holds-some-tool ?x))
+    )
+    :effect (and 
+      (soup-has-veggie ?z ?y)
+      (not (well-stirred-soup ?z))
+      (not (approved-soup ?z))
+    )
   )
   
   ; Chef x can stir soup y with a tool z if the tool can be used for stirring 
@@ -65,8 +105,17 @@
   ; - x: the chef  
   ; - y: the soup 
   ; - z: the tool 
-  (:action stir
-    ; WRITE HERE THE CODE FOR THIS ACTION
+  (:action stir :parameters (?x ?y ?z)
+    :precondition (and 
+      (CHEF ?x)
+      (SOUP ?y)
+      (TOOL ?z)
+      (chef-holds-tool ?x ?z)
+      (CAN-STIR ?z)
+    )
+    :effect (and 
+      (well-stirred-soup ?y)
+    )
   )
   
   ; Chef x can taste soup y with a tool z if the tool can be used for tasting and the soup has been well stirred before
@@ -75,8 +124,18 @@
   ; - x: the chef  
   ; - y: the soup 
   ; - z: the tool 
-  (:action taste
-   ; WRITE HERE THE CODE FOR THIS ACTION
+  (:action taste :parameters (?x ?y ?z)
+    :precondition (and 
+      (CHEF ?x)
+      (SOUP ?y)
+      (TOOL ?z)
+      (chef-holds-tool ?x ?z)
+      (CAN-TASTE ?z)
+      (well-stirred-soup ?y)
+    )
+    :effect (and 
+      (approved-soup ?y)
+    )
   )
 
 )
