@@ -73,9 +73,7 @@
       (CAN-CUT ?z)
       (not (chopped ?y))
     )
-    :effect (and 
-      (chopped ?y)
-    )
+    :effect (chopped ?y)
   )
    
   ; Chef x can add veggie y to a soup z if veggie y was chopped and if the chef does not hold any tool
@@ -113,9 +111,7 @@
       (chef-holds-tool ?x ?z)
       (CAN-STIR ?z)
     )
-    :effect (and 
-      (well-stirred-soup ?y)
-    )
+    :effect (well-stirred-soup ?y)
   )
   
   ; Chef x can taste soup y with a tool z if the tool can be used for tasting and the soup has been well stirred before
@@ -133,9 +129,7 @@
       (CAN-TASTE ?z)
       (well-stirred-soup ?y)
     )
-    :effect (and 
-      (approved-soup ?y)
-    )
+    :effect (approved-soup ?y)
   )
 
 )
